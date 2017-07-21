@@ -4,40 +4,39 @@
 call plug#begin('~/.config/.nvim/plugged')
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'pangloss/vim-javascript'
 Plug 'yuttie/comfortable-motion.vim'
 Plug 'neomake/neomake'
+Plug 'pangloss/vim-javascript'
+Plug 'othree/yajs.vim'
 call plug#end()
 
 " ****************************************
 "" KEY REMAPS
 " ****************************************
 
-" [NORMAL+INSERT+VISUAL] CTRL-A to select all text
+" [COMMAND+INSERT+VISUAL] CTRL-A to select all text
 nnoremap <C-a> ggVG<CR>
 inoremap <C-a> <Esc>ggVG<CR>
 vnoremap <C-a> <Esc>ggVG<CR>
 
-" [NORMAL+INSERT+VISUAL] SHIFT-DEL to remove line
-map <S-Del> <esc>dd
-map! <S-Del> <esc>dd==gi
+" [COMMAND+INSERT+VISUAL] SHIFT-DEL to remove line
+nnoremap <S-Del> <esc>dd
+inoremap <S-Del> <esc>dd==gi
+vnoremap <S-Del> <esc>ddgv=gv
 
-" [NORMAL+INSERT+VISUAL] CTRL-U Undo
-nnoremap <C-u> :undo<CR>
-inoremap <C-u> <Esc>:silent! undo<CR>==gi
-vnoremap <C-u> <Esc>:silent! undo<CR>gv=gv
+" [COMMAND+INSERT+VISUAL] CTRL-U Undo
+nnoremap <C-u> u<CR>
+inoremap <C-u> <Esc>u<CR>==gi
+vnoremap <C-u> <Esc>u<CR>gv=gv
 
-" [NORMAL+INSERT+VISUAL] CTRL-R Redo
-nnoremap <C-r> :redo<CR>
-inoremap <C-r> <Esc>:silent! redo<CR>==gi
-vnoremap <C-r> <Esc>:silent! redo<CR>gv=gv
+" [COMMAND+INSERT+VISUAL] CTRL-R Redo
 
-" [NORMAL+INSERT+VISUAL] CTRL-UP Move line up
+" [COMMAND+INSERT+VISUAL] CTRL-UP Move line up
 nnoremap <silent> <C-Up> :silent! m .-2<CR>==
 inoremap <silent> <C-Up> <Esc>:silent! m .-2<CR>==gi
 vnoremap <silent> <C-Up> :m '<-2<CR>gv=gv
 
-" [NORMAL+INSERT+VISUAL] CTRL-DOWN Move line down
+" [COMMAND+INSERT+VISUAL] CTRL-DOWN Move line down
 nnoremap <C-Down> :silent! m .+1<CR>==
 inoremap <C-Down> <Esc>:silent! m .+1<CR>==gi
 vnoremap <C-Down> :m '>+1<CR>gv=gv
@@ -45,16 +44,16 @@ vnoremap <C-Down> :m '>+1<CR>gv=gv
 " [TERMINAL] ESC to exit terminal-mode
 tnoremap <Esc> <C-\><C-n>
 
-" [NORMAL+INSERT+VISUAL] CTRL-S Save file
-nnoremap <C-s> :silent! w!<CR>==
-inoremap <C-s> <esc> :silent! w!<CR>==gi
-vnoremap <C-s> <esc> :silent! w!<CR>gv=gv
+" [COMMAND+INSERT+VISUAL] CTRL-S Save file
+nnoremap <C-s> :w!<CR>
+inoremap <C-s> <esc>:w!<CR>gi
+vnoremap <C-s> <esc>:w!<CR>gv=gv
 
-" [NORMAL] TAB go to next tab
+" [COMMAND] TAB go to next tab
 nnoremap <TAB> gt
 
 
-" [NORMAL] SHIFT-TAB go to previous tab
+" [COMMAND] SHIFT-TAB go to previous tab
 nnoremap <S-TAB> gT
 
 " [INSERT+VISUAL] TAB insert indnet/tab
@@ -64,42 +63,48 @@ vnoremap <TAB> >gv
 inoremap <S-TAB> <C-d>
 vnoremap <S-TAB> <gv
 
-" [NORMAL] CTRL-N new tab
+" [COMMAND] CTRL-N new tab
 nnoremap <C-n> :tabnew<CR>
 
-" [NORMAL] CTRL-W quit tab
-nnoremap <C-w> :q!i<CR>
+" [COMMAND] CTRL-W quit tab
+nnoremap <C-w> :q<CR>
 
-" [EDIT+VISUAL+NORMAL] CTRL-F open search
-nnoremap <C-f> /
-inoremap <C-f> <ESC>/
-vnoremap <C-f> <ESC>/
+" [EDIT+VISUAL+COMMAND] CTRL-F open search
+nnoremap <C-f> <ESC>:%s/
+inoremap <C-f> <ESC>:%s/
+vnoremap <C-f> <ESC>:%s/
 
-" [EDIT+VISUAL+NORMAL] SHIFT-LEFT switch to left or next window
-nnoremap <S-Right> :wincmd l<CR>
-inoremap <S-Right> <ESC>:wincmd l<CR>==gi
-vnoremap <S-Right> <ESC>:wincmd l<CR>gv=gv
+" [EDIT+VISUAL+COMMAND] ALT-LEFT switch to left or next window
+nnoremap <M-Right> :wincmd l<CR>
+inoremap <M-Right> <ESC>:wincmd l<CR>gi
+vnoremap <M-Right> <ESC>:wincmd l<CR>gv=gv
 
-" [EDIT+VISUAL+NORMAL] SHIFT-RIGHT switch to right previous window
-nnoremap <S-Left> :wincmd h<CR> 
-inoremap <S-Left> <ESC>:wincmd h<CR>==gi
-vnoremap <S-Left> <ESC>:wincmd h<CR>gv=gv
+" [EDIT+VISUAL+COMMAND] ALT-RIGHT switch to right previous window
+nnoremap <M-Left> :wincmd h<CR> 
+inoremap <M-Left> <ESC>:wincmd h<CR>gi
+vnoremap <M-Left> <ESC>:wincmd h<CR>gv=gv
 
-" [EDIT+VISUAL+NORMAL] SHIFT-UP switch to window above current
-nnoremap <S-Up> :wincmd k<CR>
-inoremap <S-Up> <ESC>:wincmd k<CR>==gi
-vnoremap <S-Up> <ESC>:wincmd k<CR>gv=gv
+" [EDIT+VISUAL+COMMAND] ALT-UP switch to window above current
+nnoremap <M-Up> :wincmd k<CR>
+inoremap <M-Up> <ESC>:wincmd k<CR>gi
+vnoremap <M-Up> <ESC>:wincmd k<CR>gv=gv
 
-" [EDIT+VISUAL+NORMAL] SHIFT-DOWN switch to window below current
-nnoremap <S-Down> :wincmd j<CR>
-inoremap <S-Down> <ESC>:wincmd j<CR>==gi
-vnoremap <S-Down> <ESC>:wincmd j<CR>gv=gv
+" [EDIT+VISUAL+COMMAND] ALT-DOWN switch to window below current
+nnoremap <M-Down> :wincmd j<CR>
+inoremap <M-Down> <ESC>:wincmd j<CR>gi
+vnoremap <M-Down> <ESC>:wincmd j<CR>gv=gv
 
-" [EDIT+VISUAL+NORMAL] CTRL-l Scroll down fast
-nnoremap <silent> <C-l> :call comfortable_motion#flick(200)<CR>
+" [EDIT+VISUAL+COMMAND] SHIFT-DOWN Scroll down fast
+nnoremap <silent> <S-Down> :call comfortable_motion#flick(200)<CR>
+inoremap <silent> <S-Down> <ESC>:call comfortable_motion#flick(200)<CR>gi
+vnoremap <silent> <S-Down> <ESC>:call comfortable_motion#flick(200)<CR>gv=gv
 
-" [EDIT+VISUAL+NORMAL] CTRL-k Scroll up fast
-nnoremap <silent> <C-k> :call comfortable_motion#flick(-200)<CR>
+" [EDIT+VISUAL+COMMAND] SHIFT-UP Scroll up fast
+nnoremap <silent> <S-Up> :call comfortable_motion#flick(-200)<CR>
+inoremap <silent> <S-Up> <ESC>:call comfortable_motion#flick(-200)<CR>gi
+vnoremap <silent> <S-Up> <ESC>:call comfortable_motion#flick(-200)<CR>gi
+
+
 
 " ****************************************
 "" GENERAL SETTINGS
@@ -116,8 +121,9 @@ set showtabline=2
 set whichwrap+=<,>,h,l,[,]
 
 " Use spaces instead of tabs
-:set expandtab
 :set tabstop=4
+:set shiftwidth=4
+:set expandtab
 
 " ****************************************
 "" PLUGIN SETTINGS
@@ -136,3 +142,8 @@ let g:javascript_plugin_jsdoc = 1
 let g:comfortable_motion_no_default_key_mappings = 1
 let g:comfortable_motion_air_drag = 4.0
 let g:comfortable_motion_friction = 0.0
+
+" neomake/neomake
+let g:neomake_open_list = 1 " show quickfix
+autocmd! BufWritePost * Neomake " execute neomake on write
+
